@@ -5,6 +5,8 @@ class Server extends EventEmitter {
     super();
     this.tasks = {};
     this.taskId = 1;
+    // the wrapper process.nextTick is important due to the order in which things happen. 
+    // the contructor of the class is called by the client in the require statement and this occurs before the definition of the response event handler.
     process.nextTick(() => {
       this.emit(
         'response',
@@ -13,14 +15,14 @@ class Server extends EventEmitter {
     });
     client.on('command', (command, args) => {
       switch (command) {
-      case 'help':
-      case 'add':
-      case 'ls':
-      case 'delete':
-        this[command](args);
-        break;
-      default:
-        this.emit('response', 'Unknown command...');
+        case 'help':
+        case 'add':
+        case 'ls':
+        case 'delete':
+          this[command](args);
+          break;
+        default:
+          this.emit('response', 'Unknown command...');
       }
     });
   }
@@ -47,7 +49,7 @@ class Server extends EventEmitter {
     this.emit('response', `Tasks:\n${this.tasksString()}`);
   }
   delete(args) {
-    delete(this.tasks[args[0]]);
+    delete (this.tasks[args[0]]);
     this.emit('response', `Deleted task ${args[0]}`);
   }
 }
