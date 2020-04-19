@@ -23,6 +23,7 @@ withTime.on('data', (data) => {
 });
 
 // दूसरा
+// withTime.on('data', (data) => {
 withTime.prependListener('data', (data) => {
   console.log(`Charaters: ${data.toString().length}`);
 });
