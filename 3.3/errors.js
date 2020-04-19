@@ -21,6 +21,7 @@ withTime.on('data', (data) => {
   console.log(`Length: ${data.length}`);
 });
 
+// withTime.on('error', console.error);
 process.once('uncaughtException', (err) => {
   console.log(err);
   // do some cleanup
