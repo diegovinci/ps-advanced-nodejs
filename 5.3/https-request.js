@@ -1,10 +1,10 @@
 const https = require('https');
 
-// req: http.ClientRequest
+// req: this request object is from the http.ClientRequest class
 const req = https.get(
   'https://www.google.com',
   (res) => {
-    // res: http.IncomingMessage
+    // res: this response object is from the http.IncommingMessage class
     console.log(res.statusCode);
     console.log(res.headers);
 
@@ -16,4 +16,4 @@ const req = https.get(
 
 req.on('error', (e) => console.log(e));
 
-console.log(req.agent); // http.Agent
+console.log(req.agent); // req.agent: the agent used for request is from the http.Agent class
