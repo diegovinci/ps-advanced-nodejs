@@ -1,5 +1,6 @@
 const fs = require('fs');
 
+// callback version
 const readFileAsArray = function(file, cb) {
   fs.readFile(file, function(err, data) {
     if (err) {
