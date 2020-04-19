@@ -21,6 +21,7 @@ server.on('connection', socket => {
       return;
     }
     Object.entries(sockets).forEach(([key, cs]) => {
+      // Prevent the sender from receiving the message he just typed and sent
       if (socket.id == key) return;
       cs.write(`${socket.name} ${timestamp()}: `);
       cs.write(data);
