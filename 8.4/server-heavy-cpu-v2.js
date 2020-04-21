@@ -8,8 +8,8 @@ server.on('request', (req, res) => {
     // const sum = longComputation();
     // return res.end(`Sum is ${sum}`);
     const compute = fork('compute.js');
-    compute.send('start');
     compute.on('message', sum => {
+      console.timeEnd('request-time');
       res.end(`Sum is ${sum}`);
     });
   } else {
@@ -18,3 +18,4 @@ server.on('request', (req, res) => {
 });
 
 server.listen(3000);
+// curl localhost:3000/compute
