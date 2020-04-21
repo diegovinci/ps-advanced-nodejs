@@ -3,19 +3,21 @@ const os = require('os');
 
 if (cluster.isMaster) {
   const cpus = os.cpus().length;
-  for (let i = 0; i<cpus; i++) {
+  for (let i = 0; i < cpus; i++) {
     cluster.fork();
   }
   console.log(`Master PID: ${process.pid}`);
 
-  cluster.on('exit', (worker, code, signal) => {
+  // When a worker crashes, fork a new one 
+  cluster.on('exit', (worker, code, signal) => { // add a condition the make sure the worker crashed intead of manually disconected
     if (code !== 0 && !worker.exitedAfterDisconnect) {
       console.log(`Worker ${worker.id} crashed. ` +
-                  'Starting a new worker...');
+        'Starting a new worker...');
       cluster.fork();
     }
   });
 
+  // In case of a redeploy, restart workers only when another is ready
   process.on('SIGUSR2', () => {
     const workers = Object.values(cluster.workers);
 
@@ -40,3 +42,8 @@ if (cluster.isMaster) {
 } else {
   require('./server');
 }
+
+// node cluster.js
+// ab -c200 -t10 http://localhost:8080/
+// kill -SIGUSR2 9603
+// zero failed requests despite the workers were restarted
